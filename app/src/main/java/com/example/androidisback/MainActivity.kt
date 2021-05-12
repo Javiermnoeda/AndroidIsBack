@@ -13,11 +13,11 @@ class MainActivity : AppCompatActivity() {
     var contador = 1
 
     var listaPersonas = mutableListOf(
-        Persona ("Javier",edad=(20..35).random(),(0..10).random(), Random.nextDouble(1.50,2.05)),
-        Persona ("Laia",edad=(20..35).random(),(0..10).random(), Random.nextDouble(1.50,2.05)),
-        Persona ("Alex",edad=(20..35).random(),(0..10).random(), Random.nextDouble(1.50,2.05)),
-        Persona ("Elisa",edad=(20..35).random(),(0..10).random(), Random.nextDouble(1.50,2.05)),
-        Persona ("Daniel",edad=(20..35).random(),(0..10).random(), Random.nextDouble(1.50,2.05)),
+        Persona ("Javier",edad=(20..35).random(),(0..10).random(), 1.73),
+        Persona ("Laia",edad=(20..35).random(),(0..10).random(), 1.72),
+        Persona ("Alex",edad=(20..35).random(),(0..10).random(), 1.90),
+        Persona ("Elisa",edad=(20..35).random(),(0..10).random(), 1.63),
+        Persona ("Daniel",edad=(20..35).random(),(0..10).random(), 1.70),
     )
     
 
@@ -87,6 +87,6 @@ class MainActivity : AppCompatActivity() {
 
 data class Persona (var nombre : String, var edad : Int, var nota : Int, var altura : Double) {
     override fun toString(): String {
-        return "\n Soy $nombre, tengo $edad años, he sacado un $nota de media y mido $altura metros"
+        return "\n Soy $nombre, tengo $edad años, he sacado un $nota de media y mido $altura metros\n"
     }
 }
