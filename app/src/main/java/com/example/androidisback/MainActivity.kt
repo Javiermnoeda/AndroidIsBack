@@ -79,7 +79,9 @@ class MainActivity : AppCompatActivity() {
                 it.edad }
             else -> println("La opcion recibida no sirve")
         }
-        binding.tv1.text = listaPersonas.toString()
+        listaPersonas.forEach {
+            binding.tv1.text = it.toString()
+        }
     }
 
 
