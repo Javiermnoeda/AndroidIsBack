@@ -1,5 +1,6 @@
 package com.example.androidisback
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,16 +10,26 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+    const val TAG_NOMBRE = "Nombre"
+    const val TAG_EDAD = "Edad"
+    const val TAG_NOTA = "Nota"
+    const val TAG_ALTURA = "Altura"
+    }
+
     lateinit var binding : ActivityMainBinding
     var contador = 1
 
     var listaPersonas = mutableListOf(
-        Persona ("Javier",edad=(20..35).random(),(0..10).random(), 1.73),
-        Persona ("Laia",edad=(20..35).random(),(0..10).random(), 1.72),
-        Persona ("Alex",edad=(20..35).random(),(0..10).random(), 1.90),
-        Persona ("Elisa",edad=(20..35).random(),(0..10).random(), 1.63),
-        Persona ("Daniel",edad=(20..35).random(),(0..10).random(), 1.70),
+        Persona ("Javier",edad=(20..35).random(),(0..10).random(), 1.73F),
+        Persona ("Laia",edad=(20..35).random(),(0..10).random(), 1.72F),
+        Persona ("Alex",edad=(20..35).random(),(0..10).random(), 1.90F),
+        Persona ("Elisa",edad=(20..35).random(),(0..10).random(), 1.63F),
+        Persona ("Daniel",edad=(20..35).random(),(0..10).random(), 1.70F),
     )
+
+    val persona = Persona("Nueva Persona",edad=(20..35).random(),(0..10).random(),1.45F)
+
     
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         binding.tv1.text = "Aquí va la lista"
         binding.tv2.text = "Qui va como se ordena"
         Log.w("Javi", "onCreate ${contador++}")
+
+        cargarPreferencias()?.let {
+            binding.tv1.setText(it.nombre + it.altura + it.edad + it.nota)
+        }
 
         mostrarListaPersonas()
     }
@@ -84,11 +99,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun cargarPreferencias() : Persona {
+        val sharedPreference = getPreferences(Context.MODE_PRIVATE)
+        var nombre = sharedPreference.getString(TAG_NOMBRE, "")
+        var edad = sharedPreference.getInt(TAG_EDAD,0)
+        var nota = sharedPreference.getInt(TAG_NOTA,0)
+        var altura = sharedPreference.getFloat(TAG_ALTURA,0F)
 
-}
-
-data class Persona (var nombre : String, var edad : Int, var nota : Int, var altura : Double) {
-    override fun toString(): String {
-        return "\n Soy $nombre, tengo $edad años, he sacado un $nota de media y mido $altura metros\n"
+        nombre?.let {
+            return Persona(it,edad,nota,altura)
+        } ?: run{
+            return Persona("Esta persona no tiene nombre",edad,nota,altura)
+        }
     }
+
+    private fun guardarPreferencias(persona: Persona) {
+        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+
+        with(sharedPreferences.edit()){
+            putString(TAG_NOMBRE, persona.nombre)
+            putInt(TAG_EDAD,persona.edad)
+            putInt(TAG_NOTA,persona.nota)
+            putFloat(TAG_ALTURA,persona.altura)
+            commit()
+        }
+    }
+
+    data class Persona (var nombre : String, var edad : Int, var nota : Int, var altura : Float) {
+        override fun toString(): String {
+            return "\n Soy $nombre, tengo $edad años, he sacado un $nota de media y mido $altura metros\n"
+        }
+    }
+
 }
+
